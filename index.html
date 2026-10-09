@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -168,6 +169,7 @@
     input[type="checkbox"] {
       accent-color: var(--wine);
       margin-top: 5px;
+      flex-shrink: 0;
     }
 
     .upload {
@@ -179,7 +181,11 @@
       text-align: center;
     }
 
-    .upload input { display: block; margin: 12px auto 0; max-width: 100%; }
+    .upload input {
+      display: block;
+      margin: 12px auto 0;
+      max-width: 100%;
+    }
 
     #preview {
       display: none;
@@ -213,6 +219,7 @@
     }
 
     button:hover { background: #592034; }
+    button:disabled { opacity: .6; cursor: wait; }
 
     .secondary {
       background: transparent;
@@ -225,6 +232,7 @@
       text-align: center;
       color: var(--wine);
       margin-top: 15px;
+      overflow-wrap: anywhere;
     }
 
     footer {
@@ -241,6 +249,10 @@
       color: var(--wine);
       letter-spacing: 0;
     }
+
+    .thanks { text-align: center; padding: 25px 0; }
+
+    [hidden] { display: none !important; }
 
     @media (max-width: 480px) {
       .page { margin: 12px auto; width: 96%; padding: 12px; }
@@ -279,6 +291,7 @@
         <div class="field">
           <label for="guest">Dein Name *</label>
           <input id="guest" name="Name" type="text"
+                 maxlength="150"
                  placeholder="Wie dürfen wir dich nennen?" required>
         </div>
 
@@ -299,60 +312,71 @@
 
         <div class="field">
           <label for="memory">Welche schöne, lustige oder besondere Erinnerung hast du mit uns?</label>
-          <textarea id="memory" name="Erinnerung" placeholder="Erzähl uns deine Geschichte …"></textarea>
+          <textarea id="memory" name="Erinnerung" maxlength="5000" placeholder="Erzähl uns deine Geschichte …"></textarea>
         </div>
 
         <div class="field">
           <label for="appreciation">Was verbindest du mit uns als Paar?</label>
-          <textarea id="appreciation" name="Was uns ausmacht" placeholder="Ein Gedanke, ein Gefühl oder eine kleine Anekdote …"></textarea>
+          <textarea id="appreciation" name="Was uns ausmacht" maxlength="5000" placeholder="Ein Gedanke, ein Gefühl oder eine kleine Anekdote …"></textarea>
         </div>
 
         <div class="section-title">03 — Für unseren gemeinsamen Weg</div>
 
         <div class="field">
           <label for="wish">Was wünschst du uns für unsere Zukunft?</label>
-          <textarea id="wish" name="Zukunftswunsch" placeholder="Dein Wunsch für unser gemeinsames Leben …"></textarea>
+          <textarea id="wish" name="Zukunftswunsch" maxlength="5000" placeholder="Dein Wunsch für unser gemeinsames Leben …"></textarea>
         </div>
 
         <div class="field">
           <label for="advice">Dein bester Ehe-Tipp oder ein Rat fürs Leben zu zweit?</label>
-          <textarea id="advice" name="Ratschlag" placeholder="Wir sind gespannt auf deine Weisheit …"></textarea>
+          <textarea id="advice" name="Ratschlag" maxlength="5000" placeholder="Wir sind gespannt auf deine Weisheit …"></textarea>
         </div>
 
         <div class="field">
           <label for="message">Gibt es noch etwas, das du uns sagen möchtest?</label>
-          <textarea id="message" name="Nachricht" placeholder="Alles, was du uns mitgeben möchtest …"></textarea>
+          <textarea id="message" name="Nachricht" maxlength="5000" placeholder="Alles, was du uns mitgeben möchtest …"></textarea>
         </div>
 
         <div class="section-title">04 — Ein Bild für die Erinnerung</div>
 
         <div class="field">
-          <label class="upload">
+          <label class="upload" for="photo">
             <strong>📷 Ein Foto auswählen</strong>
-            <div class="hint">Wähle ein Bild aus deiner Fotomediathek.</div>
-            <input id="photo" type="file" accept="image/*">
+            <div class="hint">JPG-, PNG- oder WebP-Bild bis maximal 5 MB.</div>
+            <input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
             <img id="preview" alt="Vorschau deines ausgewählten Fotos">
           </label>
-          <div class="hint">Das Foto wird hier nur auf deinem Gerät angezeigt und nicht hochgeladen.</div>
         </div>
 
         <div class="field">
-          <label class="check">
+          <label class="check" for="permission">
             <input type="checkbox" id="permission" name="Magazinfreigabe">
             <span>Ich bin damit einverstanden, dass meine Antworten für unser privates Hochzeitsmagazin verwendet werden. Bitte fragt mich vor einer öffentlichen Veröffentlichung noch einmal.</span>
           </label>
         </div>
 
         <div class="notice">
-          <strong>Ein kleiner Hinweis:</strong> Deine Antworten werden nicht automatisch an uns gesendet.
-          Mit dem Button unten kannst du sie als Textdatei auf deinem Gerät speichern und uns anschließend selbst schicken.
-          Das ausgewählte Foto wird nicht in die Textdatei übernommen.
+          <strong>Ein kleiner Hinweis:</strong>
+          Deine Antworten werden nach dem Absenden an unser digitales
+          Gästebuch übermittelt. Wenn du ein Foto auswählst, wird es
+          in unserem privaten Foto-Speicher abgelegt.
         </div>
 
         <button type="submit">Meine Antworten speichern ♡</button>
         <button type="button" class="secondary" id="reset">Formular leeren</button>
         <p id="status" role="status" aria-live="polite"></p>
       </form>
+
+      <section id="thanks" class="thanks" hidden>
+        <div class="flourish">♡</div>
+        <h1>Vielen Dank!</h1>
+        <p class="intro">
+          Deine Worte sind sicher bei uns angekommen.
+          Danke, dass du einen Teil unserer Geschichte
+          mit uns teilst.
+        </p>
+        <p class="intro">In Liebe, Savanna & Marcel</p>
+      </section>
 
       <footer>
         <div class="flourish">✧</div>
@@ -363,92 +387,158 @@
     </div>
   </main>
 
-  <script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // Ersetze beide Platzhalter durch deine Supabase-Angaben.
+    const SUPABASE_URL = 'DEINE_PROJECT_URL';
+    const SUPABASE_KEY = 'DEIN_OEFFENTLICHER_PUBLISHABLE_ODER_ANON_KEY';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
     const form = document.getElementById('guestbook');
     const photo = document.getElementById('photo');
     const preview = document.getElementById('preview');
     const status = document.getElementById('status');
+    const reset = document.getElementById('reset');
+    const thanks = document.getElementById('thanks');
+    const submitButton = form.querySelector('button[type="submit"]');
 
-    photo.addEventListener('change', function () {
-      const file = this.files && this.files[0];
+    let isSubmitting = false;
 
-      if (!file) {
-        preview.removeAttribute('src');
-        preview.style.display = 'none';
+    photo.addEventListener('change', () => {
+      const file = photo.files && photo.files[0];
+
+      preview.removeAttribute('src');
+      preview.style.display = 'none';
+
+      if (!file) return;
+
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+      if (!allowedTypes.includes(file.type)) {
+        alert('Bitte wähle ein JPG-, PNG- oder WebP-Foto aus.');
+        photo.value = '';
         return;
       }
 
-      if (!file.type.startsWith('image/')) {
-        alert('Bitte wähle eine Bilddatei aus.');
-        this.value = '';
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Das Foto darf höchstens 5 MB groß sein.');
+        photo.value = '';
         return;
       }
 
       const reader = new FileReader();
-      reader.onload = function (event) {
+
+      reader.onload = event => {
         preview.src = event.target.result;
         preview.style.display = 'block';
       };
+
       reader.readAsDataURL(file);
     });
 
-    form.addEventListener('submit', function (event) {
+    form.addEventListener('submit', async event => {
       event.preventDefault();
 
-      if (!form.reportValidity()) return;
+      if (!form.reportValidity() || isSubmitting) return;
 
-      const data = new FormData(form);
-      const lines = [
-        'HOCHZEITS-GÄSTEBUCH',
-        'Savanna & Marcel — 02. Juli 2027',
-        '',
-        'Name: ' + (data.get('Name') || ''),
-        'Wie wir uns kennen: ' + (data.getAll('Beziehung').join(', ') || 'Keine Angabe'),
-        '',
-        'Erinnerung:',
-        data.get('Erinnerung') || '',
-        '',
-        'Was uns ausmacht:',
-        data.get('Was uns ausmacht') || '',
-        '',
-        'Zukunftswunsch:',
-        data.get('Zukunftswunsch') || '',
-        '',
-        'Ratschlag:',
-        data.get('Ratschlag') || '',
-        '',
-        'Nachricht:',
-        data.get('Nachricht') || '',
-        '',
-        'Verwendung im privaten Hochzeitsmagazin: ' +
-          (document.getElementById('permission').checked ? 'Ja' : 'Nicht zugestimmt'),
-        '',
-        'Hinweis: Ein ausgewähltes Foto ist nicht in dieser Datei enthalten.'
-      ];
+      if (
+        SUPABASE_URL === 'https://shlhbegfpnjwstxcemfw.supabase.co' ||
+        SUPABASE_KEY === 'sb_publishable_T8LLHhYZWbfVn6gxSRKIfg_3PWYb5Zi'
+      ) {
+        status.textContent =
+          'Bitte trage zuerst deine Supabase-Projekt-URL und deinen öffentlichen API-Key im Code ein.';
+        return;
+      }
 
-      const blob = new Blob(
-        ['\uFEFF' + lines.join('\n')],
-        { type: 'text/plain;charset=utf-8' }
-      );
+      isSubmitting = true;
+      submitButton.disabled = true;
+      reset.disabled = true;
+      status.textContent = 'Deine Antworten werden gespeichert …';
 
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      const safeName = (data.get('Name') || 'Gast')
-        .toString().trim().replace(/[^a-z0-9äöüß_-]/gi, '_');
+      let uploadedPath = null;
+      let entrySaved = false;
 
-      link.href = url;
-      link.download = 'Gaestebuch_' + safeName + '.txt';
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
+      try {
+        const entryId = crypto.randomUUID();
+        const file = photo.files && photo.files[0];
 
-      status.textContent =
-        'Deine Textdatei wurde zum Speichern bereitgestellt. Schicke sie anschließend bitte an das Brautpaar.';
+        if (file) {
+          const extensionByType = {
+            'image/jpeg': 'jpg',
+            'image/png': 'png',
+            'image/webp': 'webp'
+          };
+
+          const extension = extensionByType[file.type];
+
+          if (!extension || file.size > 5 * 1024 * 1024) {
+            throw new Error('Das Fotoformat oder die Dateigröße ist nicht zulässig.');
+          }
+
+          uploadedPath = `${entryId}/${crypto.randomUUID()}.${extension}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('guestbook-photos')
+            .upload(uploadedPath, file, {
+              contentType: file.type,
+              upsert: false
+            });
+
+          if (uploadError) throw uploadError;
+        }
+
+        const relationships = Array.from(
+          form.querySelectorAll('input[name="Beziehung"]:checked')
+        ).map(input => input.value);
+
+        const entry = {
+          id: entryId,
+          guest_name: document.getElementById('guest').value.trim(),
+          relationship: relationships,
+          memory: document.getElementById('memory').value.trim() || null,
+          appreciation: document.getElementById('appreciation').value.trim() || null,
+          future_wish: document.getElementById('wish').value.trim() || null,
+          advice: document.getElementById('advice').value.trim() || null,
+          final_message: document.getElementById('message').value.trim() || null,
+          magazine_consent: document.getElementById('permission').checked,
+          photo_path: uploadedPath
+        };
+
+        const { error: insertError } = await supabase
+          .from('guestbook_entries')
+          .insert(entry);
+
+        if (insertError) throw insertError;
+
+        entrySaved = true;
+        form.hidden = true;
+        thanks.hidden = false;
+        status.textContent = '';
+        thanks.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      } catch (error) {
+        console.error('Gästebuch-Fehler:', error);
+
+        if (uploadedPath && !entrySaved) {
+          // Ein eventuell bereits hochgeladenes Foto bleibt im
+          // privaten Bucket, falls die Datenbankeinfügung scheitert.
+          // Es wird bewusst nicht automatisch gelöscht.
+        }
+
+        status.textContent =
+          'Das Speichern hat leider nicht geklappt. Bitte prüfe deine Verbindung und versuche es erneut.';
+
+        submitButton.disabled = false;
+        reset.disabled = false;
+        isSubmitting = false;
+      }
     });
 
-    document.getElementById('reset').addEventListener('click', function () {
+    reset.addEventListener('click', () => {
       if (!confirm('Möchtest du alle Eingaben wirklich löschen?')) return;
+
       form.reset();
       preview.removeAttribute('src');
       preview.style.display = 'none';
@@ -457,3 +547,4 @@
   </script>
 </body>
 </html>
+
