@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fbf8f6">
+<title>Unser Gästebuch | Savanna & Marcel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap');
+
+:root {
+  --rose: #a96e78;
+  --dark: #46383a;
+  --cream: #fbf8f6;
+  --line: #e8d8d7;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--dark);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+}
+header {
+  text-align: center;
+  padding: 48px 20px 25px;
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 10px;
+  color: var(--rose);
+}
+.invitation {
+  max-width: 520px;
+  margin: 25px auto;
+  padding: 38px 22px;
+  border: 1px solid #e4cece;
+  outline: 1px solid #e4cece;
+  outline-offset: 5px;
+  background: #fffdfc;
+  text-align: center;
+  position: relative;
+}
+.invitation:before, .invitation:after {
+  content: "✧";
+  position: absolute;
+  color: var(--rose);
+  font-size: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.invitation:before { top: 8px; }
+.invitation:after { bottom: 8px; }
+.script {
+  font-family: 'Great Vibes', cursive;
+  font-size: 31px;
+  color: var(--rose);
+  margin: 12px 0 0;
+}
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+}
+.names {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(35px, 8vw, 53px);
+  letter-spacing: 2px;
+  line-height: 1.2;
+  margin: 8px 0;
+}
+.date {
+  font-size: 11px;
+  letter-spacing: 4px;
+  margin-top: 17px;
+}
+main {
+  width: min(680px, 100%);
+  margin: 0 auto;
+  padding: 15px 22px 55px;
+}
+.intro { text-align: center; margin: 22px 0 35px; }
+.intro h2 { font-size: 34px; margin-bottom: 4px; }
+.intro p { font-size: 13px; }
+form {
+  background: white;
+  border: 1px solid var(--line);
+  padding: clamp(20px, 5vw, 38px);
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 27px;
+  margin: 0 0 5px;
+}
+.hint { font-size: 12px; color: #8b7779; margin: 0 0 23px; }
+.field { margin: 20px 0; }
+label, .field-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: .3px;
+  margin-bottom: 8px;
+}
+input[type="text"], textarea, select {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fffdfc;
+  color: var(--dark);
+  padding: 13px;
+  border-radius: 0;
+  font: 13px 'Montserrat', sans-serif;
+}
+textarea { min-height: 100px; resize: vertical; }
+input:focus, textarea:focus, select:focus {
+  outline: 1px solid var(--rose);
+}
+.choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  padding: 11px;
+  font-size: 11px;
+  cursor: pointer;
+  margin: 0;
+}
+.choice input { accent-color: var(--rose); }
+hr { border: 0; border-top: 1px solid var(--line); margin: 30px 0; }
+.upload {
+  border: 1px dashed #c8a7aa;
+  padding: 22px 15px;
+  text-align: center;
+  background: #fffaf9;
+}
+.upload input { width: 100%; font-size: 12px; }
+#preview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+#preview img { width: 100%; height: 105px; object-fit: cover; }
+button {
+  border: 1px solid var(--rose);
+  background: var(--rose);
+  color: white;
+  padding: 14px 20px;
+  width: 100%;
+  font: 11px 'Montserrat', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 12px;
+}
+button.secondary { background: white; color: var(--rose); }
+.permission {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 11px;
+}
+.permission input { margin-top: 5px; accent-color: var(--rose); }
+.note { font-size: 10px; color: #89797a; margin-top: 20px; }
+#success { display: none; text-align: center; padding: 28px 0; }
+footer {
+  text-align: center;
+  padding: 22px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #9b8587;
+}
+@media (max-width: 420px) {
+  header { padding-top: 30px; }
+  .choices { grid-template-columns: 1fr; }
+  form { padding: 21px 17px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Ein Tag voller Liebe</div>
+  <div class="invitation">
+    <div class="script">zu unserer Hochzeit</div>
+    <div class="names">Savanna &amp; Marcel</div>
+    <div class="date">02 · JULI · 2027</div>
+  </div>
+  <div class="eyebrow">Schön, dass du Teil davon bist</div>
+</header>
+
+<main>
+  <div class="intro">
+    <h2>Unser Gästebuch</h2>
+    <p>Wir sammeln Erinnerungen, Herzensworte und kleine Geschichten von den Menschen, die unser Leben besonders machen.</p>
+    <p>Nimm dir einen Moment Zeit und fülle unser digitales Gästebuch aus.</p>
+  </div>
+
+  <form id="guestbook">
+    <div id="questions">
+      <h2 class="section-title">Ein paar Worte über dich</h2>
+      <p class="hint">Wir möchten wissen, wer sich hier verewigt. Die Fragen sind freiwillig, sofern nicht anders angegeben.</p>
+
+      <div class="field">
+        <label for="guest">Wie dürfen wir dich nennen?</label>
+        <input id="guest" name="Name" type="text" placeholder="Dein Name oder eure Namen">
+      </div>
+
+      <div class="field">
+        <span class="field-label">Woher kennen wir uns?</span>
+        <div class="choices">
+          <label class="choice"><input type="checkbox" name="Beziehung" value="Familie"> Familie</label>
+          <label class="choice"><input type="checkbox" name="Beziehung" value="Freundeskreis"> Freundeskreis</label>
+          <label class="choice"><input type="checkbox" name="Beziehung" value="Seit Kindheit"> Schon seit der Kindheit</label>
+          <label class="choice"><input type="checkbox" name="Beziehung" value="Arbeit oder Alltag"> Arbeit oder Alltag</label>
+          <label class="choice"><input type="checkbox" name="Beziehung" value="Gemeinsame Freunde"> Durch gemeinsame Freunde</label>
+          <label class="choice"><input type="checkbox" name="Beziehung" value="Sonstiges"> Anders oder lieber nicht sagen</label>
+        </div>
+      </div>
+
+      <hr>
+      <h2 class="section-title">Erinnerungen, die bleiben</h2>
+      <p class="hint">Große Abenteuer oder kleine Alltagsmomente – alles ist willkommen.</p>
+
+      <div class="field">
+        <label for="memory">Welche gemeinsame Erinnerung bringt dich zum Lächeln?</label>
+        <textarea id="memory" name="Erinnerung" placeholder="Ich erinnere mich besonders gern an …"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="appreciation">Was schätzt du an uns oder an einem von uns besonders?</label>
+        <textarea id="appreciation" name="Wertschaetzung" placeholder="Was du uns schon immer sagen wolltest …"></textarea>
+      </div>
+
+      <hr>
+      <h2 class="section-title">Ein Blick in die Zukunft</h2>
+      <p class="hint">Deine Wünsche, Gedanken und guten Ratschläge für unseren gemeinsamen Weg.</p>
+
+      <div class="field">
+        <label for="advice">Was möchtest du uns für unsere gemeinsame Zukunft mitgeben?</label>
+        <textarea id="advice" name="Zukunft" placeholder="Ein Wunsch, ein Tipp oder ein Gedanke …"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="wish">Was wünschst du uns für die kommenden Jahre?</label>
+        <textarea id="wish" name="Wunsch" placeholder="Ich wünsche euch …"></textarea>
+      </div>
+
+      <hr>
+      <h2 class="section-title">Ein Bild sagt mehr als tausend Worte</h2>
+      <p class="hint">Wenn du magst, wähle ein Foto aus, das du mit uns verbindest.</p>
+
+      <div class="upload">
+        <p>♡ Dein Foto für unsere Erinnerungen</p>
+        <input id="photos" type="file" accept="image/*" multiple>
+        <div id="preview"></div>
+        <p class="note">Die Bilder werden hier nur zur Vorschau angezeigt. Sie werden nicht automatisch hochgeladen oder gespeichert.</p>
+      </div>
+
+      <hr>
+      <h2 class="section-title">Zum Schluss</h2>
+
+      <div class="field">
+        <label for="message">Möchtest du uns noch etwas sagen?</label>
+        <textarea id="message" name="Abschlussnachricht" placeholder="Ein letzter Gruß für unser Erinnerungsbuch …"></textarea>
+      </div>
+
+      <label class="permission">
+        <input type="checkbox" id="consent">
+        <span>Ich bin damit einverstanden, dass meine Antworten in einem privaten Hochzeits-Erinnerungsbuch verwendet werden dürfen. Mir ist bewusst, dass diese Website meine Antworten nicht automatisch an das Brautpaar übermittelt.</span>
+      </label>
+
+      <button type="button" id="download">Meine Antworten herunterladen</button>
+      <p class="note">Wichtig: Damit eure Antworten wirklich bei Savanna und Marcel ankommen, muss noch eine sichere Übermittlung eingerichtet werden. Der Button erstellt eine Textdatei auf deinem Gerät. Fotos sind darin nicht enthalten.</p>
+    </div>
+
+    <div id="success">
+      <div class="script">Vielen Dank!</div>
+      <h2 class="section-title">Ein Stück Erinnerung</h2>
+      <p>Danke, dass du dir Zeit für uns genommen hast. Deine Worte sind etwas Besonderes.</p>
+      <button type="button" class="secondary" id="back">Zurück zu meinen Antworten</button>
+    </div>
+  </form>
+</main>
+
+<footer>
+  MIT LIEBE · SAVANNA &amp; MARCEL · 02. JULI 2027
+</footer>
+
+<script>
+const photos = document.getElementById('photos');
+const preview = document.getElementById('preview');
+
+photos.addEventListener('change', function () {
+  preview.innerHTML = '';
+  Array.from(photos.files || []).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const img = document.createElement('img');
+    img.alt = 'Foto-Vorschau';
+    const reader = new FileReader();
+    reader.onload = e => img.src = e.target.result;
+    reader.readAsDataURL(file);
+    preview.appendChild(img);
+  });
+});
+
+document.getElementById('download').addEventListener('click', function () {
+  const form = document.getElementById('guestbook');
+  const data = new FormData(form);
+  const lines = [
+    'HOCHZEITS-GÄSTEBUCH',
+    'Savanna & Marcel · 02. Juli 2027',
+    '',
+    'Hinweis: Diese Datei wurde auf dem Gerät des Gastes erstellt.',
+    'Die ausgewählten Fotos sind nicht enthalten.',
+    ''
+  ];
+
+  for (const [key, value] of data.entries()) {
+    if (key === 'photos') continue;
+    lines.push(key + ': ' + value);
+  }
+
+  lines.push('');
+  lines.push('Einwilligung zur Verwendung im privaten Erinnerungsbuch: ' +
+    (document.getElementById('consent').checked ? 'Ja' : 'Nein'));
+
+  const blob = new Blob([lines.join('\n')], {
+    type: 'text/plain;charset=utf-8'
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Gaestebuch-Antworten.txt';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+
+  document.getElementById('questions').style.display = 'none';
+  document.getElementById('success').style.display = 'block';
+});
+
+document.getElementById('back').addEventListener('click', function () {
+  document.getElementById('questions').style.display = 'block';
+  document.getElementById('success').style.display = 'none';
+});
+</script>
+
+</body>
+</html>
