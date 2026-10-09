@@ -391,8 +391,8 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
     // Ersetze beide Platzhalter durch deine Supabase-Angaben.
-    const SUPABASE_URL = 'DEINE_PROJECT_URL';
-    const SUPABASE_KEY = 'DEIN_OEFFENTLICHER_PUBLISHABLE_ODER_ANON_KEY';
+    const SUPABASE_URL = 'https://shlhbegfpnjwstxcemfw.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_T8LLHhYZWbfVn6gxSRKIfg_3PWYb5Zi';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -445,7 +445,7 @@
 
       if (
         SUPABASE_URL === 'https://shlhbegfpnjwstxcemfw.supabase.co' ||
-        SUPABASE_KEY === 'sb_publishable_T8LLHhYZWbfVn6gxSRKIfg_3PWYb5Zi'
+          SUPABASE_KEY === 'sb_publishable_T8LLHhYZWbfVn6gx-SRKIfg_3PWYb5Zi'
       ) {
         status.textContent =
           'Bitte trage zuerst deine Supabase-Projekt-URL und deinen öffentlichen API-Key im Code ein.';
