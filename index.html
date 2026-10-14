@@ -1,381 +1,442 @@
 <!DOCTYPE html>
-<html lang="de" class="h-full">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hochzeits-Gästebuch | Magazin Edition</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Cormorant Garamond (Magazine Serif) & Inter -->
+    <title>Gästebuch – Savanna & Marcel</title>
+    <!-- Einbindung einer minimalistischen Serifenschrift (ähnlich wie La Luxes / edle Magazin-Typografie) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        serif: ['"Cormorant Garamond"', 'serif'],
-                        sans: ['"Inter"', 'sans-serif'],
-                    },
-                    colors: {
-                        paper: '#fcfbf9',
-                        ink: '#111111',
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
     <style>
-        /* Custom smooth transition styles and magazine look */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #111111;
+            --border-color: #111111;
+            --gray-light: #f7f7f7;
+            --gray-medium: #888888;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: #fcfbf9;
-            color: #111111;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .fade-enter {
-            opacity: 0;
-            transform: translateY(10px);
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 50px 40px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
         }
-        .fade-enter-active {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+
+        /* Views management */
+        .view {
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
         }
-        /* Hide scrollbars for clean magazine look */
-        ::-webkit-scrollbar {
-            width: 4px;
+
+        .view.active {
+            display: block;
         }
-        ::-webkit-scrollbar-track {
-            background: #fcfbf9;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        ::-webkit-scrollbar-thumb {
-            background: #cccccc;
+
+        /* Typography */
+        h1, h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        /* Form styling */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            background-color: var(--gray-light);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .file-upload-wrapper {
+            border: 1px dashed var(--border-color);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .file-upload-wrapper:hover {
+            background-color: var(--gray-light);
+        }
+
+        .file-upload-wrapper input {
+            display: none;
+        }
+
+        .file-name {
+            font-size: 0.85rem;
+            color: var(--gray-medium);
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 30px;
+        }
+
+        .btn:hover {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-color);
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        /* Admin Export Link */
+        .admin-link {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .admin-link a {
+            color: var(--gray-medium);
+            text-decoration: none;
+            border-bottom: 1px solid var(--gray-medium);
+            padding-bottom: 2px;
+        }
+
+        .admin-link a:hover {
+            color: var(--text-color);
+            border-color: var(--text-color);
+        }
+
+        /* Export Table view */
+        .export-container {
+            max-width: 900px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--gray-light);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
         }
     </style>
 </head>
-<body class="h-full font-sans antialiased selection:bg-black selection:text-white flex flex-col justify-between">
+<body>
 
-    <!-- Top Navigation / Header -->
-    <header class="w-full px-8 py-6 flex justify-between items-center border-b border-black/10">
-        <div class="font-serif tracking-widest text-lg uppercase">Gästebuch &middot; Magazin</div>
-        <div class="flex items-center space-x-6 text-sm tracking-widest">
-            <span id="step-indicator" class="text-black/50">01 / 03</span>
-            <button onclick="toggleAdminModal(true)" class="text-xs uppercase underline tracking-wider hover:opacity-60 transition-opacity">Admin / Export</button>
-        </div>
-    </header>
+    <div class="container" id="mainContainer">
 
-    <!-- Main Container -->
-    <main class="flex-grow flex items-center justify-center px-4 sm:px-8 py-12">
-        <div class="max-w-2xl w-full mx-auto">
-
-            <!-- STEP 1: WELCOME SCREEN -->
-            <section id="view-welcome" class="view-section text-center space-y-8 fade-enter fade-enter-active">
-                <div class="space-y-4">
-                    <p class="text-xs uppercase tracking-[0.3em] text-black/60">Digitale Erinnerung</p>
-                    <h1 class="font-serif text-5xl sm:text-7xl font-light tracking-tight italic">Sarah &amp; Julian</h1>
-                    <div class="w-12 h-[1px] bg-black mx-auto mt-6"></div>
-                </div>
-                <p class="font-light text-black/80 max-w-lg mx-auto leading-relaxed text-lg">
-                    Willkommen in unserem digitalen Gästebuch. Teilt eure schönsten Erinnerungen, Anekdoten und Wünsche mit uns. Eure Beiträge werden gesammelt und für unser persönliches Hochzeitsmagazin aufbereitet.
-                </p>
-                <div class="pt-6">
-                    <button onclick="goToStep('questionnaire')" class="inline-block px-10 py-4 bg-black text-white text-xs uppercase tracking-[0.25em] rounded-none hover:bg-black/80 transition-all shadow-sm">
-                        Beitrag verfassen
-                    </button>
-                </div>
-            </section>
-
-            <!-- STEP 2: QUESTIONNAIRE / GUESTBOOK FORM -->
-            <section id="view-questionnaire" class="view-section hidden space-y-8">
-                <div class="text-center space-y-2">
-                    <p class="text-xs uppercase tracking-[0.3em] text-black/60">Eure Worte an uns</p>
-                    <h2 class="font-serif text-3xl sm:text-4xl italic">Das Gästebuch-Formular</h2>
-                </div>
-
-                <form id="guestbook-form" onsubmit="handleFormSubmit(event)" class="space-y-6 bg-white p-8 sm:p-12 border border-black/10 shadow-sm">
-                    <!-- Name -->
-                    <div class="space-y-2">
-                        <label class="block text-xs uppercase tracking-widest text-black/70">Euer Name / eure Namen *</label>
-                        <input type="text" id="guest-name" required placeholder="z.B. Anna &amp; Max" 
-                            class="w-full bg-paper border border-black/20 p-4 text-sm focus:outline-none focus:border-black transition-colors">
-                    </div>
-
-                    <!-- Favorite Memory -->
-                    <div class="space-y-2">
-                        <label class="block text-xs uppercase tracking-widest text-black/70">Eure Lieblingserinnerung mit uns</label>
-                        <textarea id="guest-memory" rows="3" placeholder="Erzählt uns eine kurze Geschichte..." 
-                            class="w-full bg-paper border border-black/20 p-4 text-sm focus:outline-none focus:border-black transition-colors resize-none"></textarea>
-                    </div>
-
-                    <!-- Wishes for the Future -->
-                    <div class="space-y-2">
-                        <label class="block text-xs uppercase tracking-widest text-black/70">Wünsche für unsere Zukunft *</label>
-                        <textarea id="guest-wishes" required rows="3" placeholder="Für eure gemeinsame Ehe wünschen wir euch..." 
-                            class="w-full bg-paper border border-black/20 p-4 text-sm focus:outline-none focus:border-black transition-colors resize-none"></textarea>
-                    </div>
-
-                    <!-- File Upload (Photos / Videos) -->
-                    <div class="space-y-2">
-                        <label class="block text-xs uppercase tracking-widest text-black/70">Fotos oder kleine Videos hochladen</label>
-                        <div class="border border-dashed border-black/30 p-6 text-center bg-paper hover:bg-black/5 transition-colors cursor-pointer relative" onclick="document.getElementById('guest-media').click()">
-                            <input type="file" id="guest-media" multiple accept="image/*,video/*" class="hidden" onchange="handleFileSelect(event)">
-                            <div id="file-upload-label" class="text-xs text-black/70 tracking-wider">
-                                Klicken zum Auswählen oder Dateien hierher ziehen<br>
-                                <span class="text-[10px] text-black/40 mt-1 block">(Mehrere Bilder/Videos möglich)</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="pt-4 flex justify-between items-center">
-                        <button type="button" onclick="goToStep('welcome')" class="text-xs uppercase tracking-widest text-black/60 hover:text-black">
-                            &larr; Zurück
-                        </button>
-                        <button type="submit" class="px-8 py-4 bg-black text-white text-xs uppercase tracking-[0.25em] hover:bg-black/80 transition-all">
-                            Beitrag absenden
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <!-- STEP 3: THANK YOU / FAREWELL -->
-            <section id="view-farewell" class="view-section hidden text-center space-y-8">
-                <div class="space-y-4">
-                    <p class="text-xs uppercase tracking-[0.3em] text-black/60">Übermittlung erfolgreich</p>
-                    <h2 class="font-serif text-5xl sm:text-6xl font-light italic">Von Herzen Danke</h2>
-                    <div class="w-12 h-[1px] bg-black mx-auto mt-6"></div>
-                </div>
-                <p class="font-light text-black/80 max-w-md mx-auto leading-relaxed text-lg">
-                    Eure Nachricht und Medien wurden erfolgreich übermittelt und sicher gespeichert. Ihr helft uns dabei, dieses Fest unvergesslich zu machen!
-                </p>
-                <div class="pt-6 flex justify-center space-x-4">
-                    <button onclick="resetAndRestart()" class="px-8 py-4 bg-black text-white text-xs uppercase tracking-[0.25em] hover:bg-black/80 transition-all">
-                        Weiteren Eintrag erfassen
-                    </button>
-                </div>
-            </section>
-
-        </div>
-    </main>
-
-    <!-- Footer Note -->
-    <footer class="w-full px-8 py-6 text-center border-t border-black/10 text-xs tracking-widest text-black/50">
-        &copy; 2026 Sarah &amp; Julian &middot; Magazin Edition
-    </footer>
-
-    <!-- ADMIN / EXPORT MODAL -->
-    <div id="admin-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-paper max-w-2xl w-full max-h-[90vh] flex flex-col border border-black/20 shadow-2xl">
-            <!-- Modal Header -->
-            <div class="p-6 border-b border-black/10 flex justify-between items-center">
-                <h3 class="font-serif text-2xl italic">Admin- &amp; Export-Center</h3>
-                <button onclick="toggleAdminModal(false)" class="text-xs uppercase tracking-widest text-black/60 hover:text-black">Schließen</button>
-            </div>
-            <!-- Modal Body -->
-            <div class="p-6 overflow-y-auto space-y-6 flex-grow">
-                <p class="text-xs text-black/70 leading-relaxed">
-                    Hier seht ihr alle bisher eingegangenen Gästebuch-Einträge. Ihr könnt die Daten als JSON oder CSV exportieren, um sie direkt für die Druckerei oder das Fotobuch-Magazin zu nutzen.
-                </p>
-                <div class="flex space-x-4">
-                    <button onclick="exportData('json')" class="px-4 py-2 bg-black text-white text-xs uppercase tracking-widest hover:bg-black/80">Export als JSON</button>
-                    <button onclick="exportData('csv')" class="px-4 py-2 bg-black text-white text-xs uppercase tracking-widest hover:bg-black/80">Export als CSV</button>
-                    <button onclick="clearLocalStorage()" class="px-4 py-2 border border-red-500 text-red-600 text-xs uppercase tracking-widest hover:bg-red-50">Alle Daten löschen</button>
-                </div>
-                <div class="border-t border-black/10 pt-4">
-                    <h4 class="text-xs uppercase tracking-widest text-black/50 mb-3">Gespeicherte Einträge (<span id="entry-count">0</span>)</h4>
-                    <div id="entries-preview" class="space-y-3">
-                        <!-- Dynamic list of entries -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-black text-white px-6 py-3 text-xs tracking-widest uppercase transform translate-y-20 opacity-0 transition-all duration-300 z-50 shadow-lg">
-        Nachricht gesendet
-    </div>
-
-    <!-- Application JavaScript -->
-    <script>
-        // State management for uploaded files during current submission
-        let currentUploadedFiles = [];
-
-        // Navigation control between views
-        function goToStep(stepName) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+        <!-- VIEW 1: BEGRÜßUNG -->
+        <div id="view-welcome" class="view active">
+            <p style="letter-spacing: 3px; font-size: 0.8rem; text-transform: uppercase;">Herzlich Willkommen</p>
+            <h1>Savanna & Marcel</h1>
+            <p style="margin-top: 20px;">Wir freuen uns unglaublich, diesen besonderen Tag mit euch zu feiern. Um dieses Fest für die Ewigkeit in einem Magazin-Gästebuch festzuhalten, würden wir uns riesig über eure persönlichen Worte, Wünsche und Fotos freuen.</p>
+            <button class="btn" onclick="switchView('view-form')">Zum Gästebuch</button>
             
-            const stepIndicator = document.getElementById('step-indicator');
-            if (stepName === 'welcome') {
-                document.getElementById('view-welcome').classList.remove('hidden');
-                stepIndicator.textContent = '01 / 03';
-            } else if (stepName === 'questionnaire') {
-                document.getElementById('view-questionnaire').classList.remove('hidden');
-                stepIndicator.textContent = '02 / 03';
-                // Reset form inputs
-                document.getElementById('guestbook-form').reset();
-                currentUploadedFiles = [];
-                document.getElementById('file-upload-label').innerHTML = 'Klicken zum Auswählen oder Dateien hierher ziehen<br><span class="text-[10px] text-black/40 mt-1 block">(Mehrere Bilder/Videos möglich)</span>';
-            } else if (stepName === 'farewell') {
-                document.getElementById('view-farewell').classList.remove('hidden');
-                stepIndicator.textContent = '03 / 03';
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            <div class="admin-link">
+                <a href="#" onclick="openAdminView()">Admin-Ansicht (Einträge exportieren)</a>
+            </div>
+        </div>
+
+        <!-- VIEW 2: FRAGEBOGEN -->
+        <div id="view-form" class="view">
+            <h2>Eure Nachricht</h2>
+            <p>Lasst uns da lassen, was euch einfällt – Erinnerungen, Ratschläge oder liebe Wünsche.</p>
+            
+            <form id="guestbookForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label for="guestName">Euer Name(n)</label>
+                    <input type="text" id="guestName" required placeholder="z.B. Anna & Thomas">
+                </div>
+
+                <div class="form-group">
+                    <label for="guestMessage">Eure Wünsche & Erinnerungen</label>
+                    <textarea id="guestMessage" required placeholder="Schreibt uns etwas Schönes..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="favoriteMemory">Lieblingsmoment oder Anekdote mit uns?</label>
+                    <input type="text" id="favoriteMemory" placeholder="Optionaler Einblick...">
+                </div>
+
+                <div class="form-group">
+                    <label>Foto oder kurzer Videoclip hochladen</label>
+                    <div class="file-upload-wrapper" onclick="document.getElementById('guestFile').click()">
+                        <span>Datei auswählen oder hierher ziehen</span>
+                        <input type="file" id="guestFile" accept="image/*,video/*" onchange="updateFileName(this)">
+                        <span class="file-name" id="fileNameDisplay">Keine Datei ausgewählt</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Eintrag absenden</button>
+                <button type="button" class="btn btn-secondary" onclick="switchView('view-welcome')">Zurück</button>
+            </form>
+        </div>
+
+        <!-- VIEW 3: ABSCHIED & DANKSAGUNG -->
+        <div id="view-thanks" class="view">
+            <h2>Vielen Dank!</h2>
+            <p>Eure Nachricht, eure Erinnerungen und eure Medien wurden erfolgreich an uns übermittelt.</p>
+            <p>Wir können es kaum erwarten, diese nach der Hochzeit in unserem Magazin-Fotobuch durchzublättern.</p>
+            <button class="btn" onclick="resetAndReturn()">Zurück zum Start</button>
+        </div>
+
+        <!-- VIEW 4: ADMIN / EXPORT ANSICHT -->
+        <div id="view-admin" class="view export-container">
+            <h2>Gästebuch-Export</h2>
+            <p>Hier seht ihr alle gesammelten Einträge für euer Magazin-Layout.</p>
+            
+            <div style="overflow-x: auto;">
+                <table id="exportTable">
+                    <thead>
+                        <tr>
+                            <th>Zeitpunkt</th>
+                            <th>Name</th>
+                            <th>Nachricht</th>
+                            <th>Anekdote</th>
+                            <th>Datei</th>
+                        </tr>
+                    </thead>
+                    <tbody id="exportTableBody">
+                        <!-- Einträge werden per JS geladen -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn" onclick="exportDataJSON()">Als JSON herunterladen</button>
+            <button class="btn btn-secondary" onclick="switchView('view-welcome')">Zurück zur Startseite</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Wechsel zwischen den Ansichten (Tabs)
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById(viewId).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        // Handle file selection preview / metadata extraction
-        function handleFileSelect(event) {
-            const files = event.target.files;
-            currentUploadedFiles = [];
-            if (files.length > 0) {
-                let fileNames = [];
-                for (let i = 0; i < files.length; i++) {
-                    fileNames.push(files[i].name);
-                    // Convert files to base64 or store metadata for local storage export
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        currentUploadedFiles.push({
-                            name: files[i].name,
-                            size: files[i].size,
-                            type: files[i].type,
-                            data: e.target.result // Base64 data string
-                        });
-                    };
-                    reader.readAsDataURL(files[i]);
-                }
-                document.getElementById('file-upload-label').innerHTML = `<span class="font-medium text-black">${files.length} Datei(en) ausgewählt:</span><br><span class="text-[10px] text-black/60">${fileNames.join(', ')}</span>`;
+        // Dateinamen im Upload-Feld anzeigen
+        function updateFileName(input) {
+            const display = document.getElementById('fileNameDisplay');
+            if (input.files && input.files[0]) {
+                display.textContent = input.files[0].name;
+            } else {
+                display.textContent = 'Keine Datei ausgewählt';
             }
         }
 
-        // Handle form submission and save to localStorage
+        // Formular absenden und Daten im LocalStorage sichern
         function handleFormSubmit(event) {
             event.preventDefault();
 
-            const name = document.getElementById('guest-name').value.trim();
-            const memory = document.getElementById('guest-memory').value.trim();
-            const wishes = document.getElementById('guest-wishes').value.trim();
-
-            const newEntry = {
-                id: 'entry_' + Date.now(),
-                timestamp: new Date().toISOString(),
-                name: name,
-                memory: memory,
-                wishes: wishes,
-                media: currentUploadedFiles
-            };
-
-            // Retrieve existing entries or initialize array
-            let entries = JSON.parse(localStorage.getItem('wedding_guestbook_entries') || '[]');
-            entries.push(newEntry);
-            localStorage.setItem('wedding_guestbook_entries', JSON.stringify(entries));
-
-            showToast('Eintrag erfolgreich gespeichert');
-            goToStep('farewell');
-        }
-
-        // Reset and start over
-        function resetAndRestart() {
-            goToStep('welcome');
-        }
-
-        // Admin Modal Controls
-        function toggleAdminModal(show) {
-            const modal = document.getElementById('admin-modal');
-            if (show) {
-                renderAdminEntries();
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
-
-        // Render entries inside the admin view
-        function renderAdminEntries() {
-            let entries = JSON.parse(localStorage.getItem('wedding_guestbook_entries') || '[]');
-            document.getElementById('entry-count').textContent = entries.length;
+            const name = document.getElementById('guestName').value;
+            const message = document.getElementById('guestMessage').value;
+            const memory = document.getElementById('favoriteMemory').value;
+            const fileInput = document.getElementById('guestFile');
             
-            const container = document.getElementById('entries-preview');
-            if (entries.length === 0) {
-                container.innerHTML = '<p class="text-xs text-black/40 italic">Bisher keine Einträge vorhanden.</p>';
-                return;
-            }
+            let fileName = 'Keine Datei';
+            let fileData = null;
 
-            container.innerHTML = entries.map((entry, index) => `
-                <div class="p-4 bg-white border border-black/10 text-xs space-y-1">
-                    <div class="flex justify-between font-medium">
-                        <span>#${index + 1} - ${escapeHtml(entry.name)}</span>
-                        <span class="text-black/40">${new Date(entry.timestamp).toLocaleString()}</span>
-                    </div>
-                    <p class="text-black/70"><strong>Wünsche:</strong> ${escapeHtml(entry.wishes)}</p>
-                    ${entry.memory ? `<p class="text-black/70"><strong>Erinnerung:</strong> ${escapeHtml(entry.memory)}</p>` : ''}
-                    <p class="text-black/50"><strong>Medien:</strong> ${entry.media ? entry.media.length + ' Datei(en)' : 'Keine'}</p>
-                </div>
-            `).join('');
-        }
+            const saveEntry = (fName, fData) => {
+                const entry = {
+                    date: new Date().toLocaleString('de-DE'),
+                    name: name,
+                    message: message,
+                    memory: memory,
+                    fileName: fName,
+                    fileData: fData
+                };
 
-        // Export data as JSON or CSV
-        function exportData(format) {
-            let entries = JSON.parse(localStorage.getItem('wedding_guestbook_entries') || '[]');
-            if (entries.length === 0) {
-                showToast('Keine Daten zum Exportieren vorhanden');
-                return;
-            }
+                // Bestehende Einträge laden oder neuen Array starten
+                let entries = JSON.parse(localStorage.getItem('wedding_guestbook')) || [];
+                entries.push(entry);
+                localStorage.setItem('wedding_guestbook', JSON.stringify(entries));
 
-            if (format === 'json') {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(entries, null, 2));
-                const downloadAnchor = document.createElement('a');
-                downloadAnchor.setAttribute("href", dataStr);
-                downloadAnchor.setAttribute("download", "gaestebuch_export.json");
-                document.body.appendChild(downloadAnchor);
-                downloadAnchor.click();
-                downloadAnchor.remove();
-                showToast('JSON Export heruntergeladen');
-            } else if (format === 'csv') {
-                let csvContent = "data:text/csv;charset=utf-8,ID,Timestamp,Name,Erinnerung,Wuensche,MediaCount\r\n";
-                entries.forEach(e => {
-                    let row = [e.id, e.timestamp, `"${e.name}"`, `"${(e.memory || '').replace(/"/g, '""')}"`, `"${e.wishes.replace(/"/g, '""')}"`, e.media ? e.media.length : 0];
-                    csvContent += row.join(",") + "\r\n";
-                });
-                const encodedUri = encodeURI(csvContent);
-                const downloadAnchor = document.createElement('a');
-                downloadAnchor.setAttribute("href", encodedUri);
-                downloadAnchor.setAttribute("download", "gaestebuch_export.csv");
-                document.body.appendChild(downloadAnchor);
-                downloadAnchor.click();
-                downloadAnchor.remove();
-                showToast('CSV Export heruntergeladen');
-            }
-        }
-
-        // Clear local storage data
-        function clearLocalStorage() {
-            if (confirm('Möchtest du wirklich alle Gästebuch-Einträge unwiderruflich löschen?')) {
-                localStorage.removeItem('wedding_guestbook_entries');
-                renderAdminEntries();
-                showToast('Alle Daten gelöscht');
-            }
-        }
-
-        // Toast notification helper
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        // Simple HTML escape utility
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
+                // Weiterleitung zur Dankeseite
+                switchView('view-thanks');
             };
-            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+
+            // Falls eine Datei hochgeladen wurde, als Base64 einlesen, damit sie im Speicher bleibt
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveEntry(file.name, e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                saveEntry(fileName, fileData);
+            }
+        }
+
+        // Admin-Ansicht aufrufen und Tabelle füllen
+        function openAdminView() {
+            const tbody = document.getElementById('exportTableBody');
+            tbody.innerHTML = '';
+
+            let entries = JSON.parse(localStorage.getItem('wedding_guestbook')) || [];
+
+            if (entries.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Bisher noch keine Einträge vorhanden.</td></tr>';
+            } else {
+                entries.forEach(entry => {
+                    const tr = document.createElement('tr');
+                    
+                    let fileColumn = entry.fileName;
+                    if (entry.fileData) {
+                        fileColumn = `<a href="${entry.fileData}" target="_blank" download="${entry.fileName}">Download (${entry.fileName})</a>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td>${entry.date}</td>
+                        <td><b>${escapeHtml(entry.name)}</b></td>
+                        <td>${escapeHtml(entry.message)}</td>
+                        <td>${escapeHtml(entry.memory)}</td>
+                        <td>${fileColumn}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            switchView('view-admin');
+        }
+
+        // JSON Export für den Weiterverarbeitungsprozess des Magazins
+        function exportDataJSON() {
+            let entries = localStorage.getItem('wedding_guestbook') || '[]';
+            let blob = new Blob([entries], {type: 'application/json'});
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'gaestebuch_savanna_marcel.json';
+            a.click();
+        }
+
+        function resetAndReturn() {
+            document.getElementById('guestbookForm').reset();
+            document.getElementById('fileNameDisplay').textContent = 'Keine Datei ausgewählt';
+            switchView('view-welcome');
+        }
+
+        // Hilfsfunktion zur Zeichensicherheit
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
     </script>
 </body>
