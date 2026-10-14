@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gästebuch – Savanna & Marcel</title>
-    <!-- Einbindung einer minimalistischen Serifenschrift (ähnlich wie La Luxes / edle Magazin-Typografie) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
@@ -47,7 +46,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.03);
         }
 
-        /* Views management */
         .view {
             display: none;
             animation: fadeIn 0.8s ease forwards;
@@ -62,7 +60,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Typography */
         h1, h2 {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 400;
@@ -72,14 +69,8 @@
             text-transform: uppercase;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            line-height: 1.2;
-        }
-
-        h2 {
-            font-size: 2rem;
-        }
+        h1 { font-size: 2.5rem; line-height: 1.2; }
+        h2 { font-size: 2rem; }
 
         p {
             text-align: center;
@@ -88,7 +79,6 @@
             color: #333;
         }
 
-        /* Form styling */
         .form-group {
             margin-bottom: 25px;
         }
@@ -103,8 +93,7 @@
         }
 
         input[type="text"],
-        textarea,
-        select {
+        textarea {
             width: 100%;
             padding: 12px 15px;
             background: transparent;
@@ -112,13 +101,9 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 0.95rem;
             color: var(--text-color);
-            border-radius: 0;
-            transition: all 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        textarea:focus,
-        select:focus {
+        input[type="text"]:focus, textarea:focus {
             outline: none;
             background-color: var(--gray-light);
         }
@@ -151,7 +136,6 @@
             display: block;
         }
 
-        /* Buttons */
         .btn {
             display: block;
             width: 100%;
@@ -186,7 +170,6 @@
             color: var(--bg-color);
         }
 
-        /* Admin Export Link */
         .admin-link {
             text-align: center;
             margin-top: 40px;
@@ -207,10 +190,7 @@
             border-color: var(--text-color);
         }
 
-        /* Export Table view */
-        .export-container {
-            max-width: 900px;
-        }
+        .export-container { max-width: 900px; }
 
         table {
             width: 100%;
@@ -241,7 +221,7 @@
         <div id="view-welcome" class="view active">
             <p style="letter-spacing: 3px; font-size: 0.8rem; text-transform: uppercase;">Herzlich Willkommen</p>
             <h1>Savanna & Marcel</h1>
-            <p style="margin-top: 20px;">Wir freuen uns unglaublich, diesen besonderen Tag mit euch zu feiern. Um dieses Fest für die Ewigkeit in einem Magazin-Gästebuch festzuhalten, würden wir uns riesig über eure persönlichen Worte, Wünsche und Fotos freuen.</p>
+            <p style="margin-top: 20px;">Wir freuen uns unglaublich, diesen besonderen Tag mit euch zu feiern. Helft uns dabei, dieses Magazin-Gästebuch mit euren Worten und Lieblingsmomenten zu füllen.</p>
             <button class="btn" onclick="switchView('view-form')">Zum Gästebuch</button>
             
             <div class="admin-link">
@@ -252,7 +232,7 @@
         <!-- VIEW 2: FRAGEBOGEN -->
         <div id="view-form" class="view">
             <h2>Eure Nachricht</h2>
-            <p>Lasst uns da lassen, was euch einfällt – Erinnerungen, Ratschläge oder liebe Wünsche.</p>
+            <p>Hinterlasst uns Wünsche und bis zu 4 Fotos oder kurze Videoclips.</p>
             
             <form id="guestbookForm" onsubmit="handleFormSubmit(event)">
                 <div class="form-group">
@@ -271,11 +251,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Foto oder kurzer Videoclip hochladen</label>
-                    <div class="file-upload-wrapper" onclick="document.getElementById('guestFile').click()">
-                        <span>Datei auswählen oder hierher ziehen</span>
-                        <input type="file" id="guestFile" accept="image/*,video/*" onchange="updateFileName(this)">
-                        <span class="file-name" id="fileNameDisplay">Keine Datei ausgewählt</span>
+                    <label>Fotos / Videos hochladen (1 bis max. 4 Dateien)</label>
+                    <div class="file-upload-wrapper" onclick="document.getElementById('guestFiles').click()">
+                        <span>Dateien auswählen (max. 4)</span>
+                        <input type="file" id="guestFiles" accept="image/*,video/*" multiple max="4" onchange="updateFileNames(this)">
+                        <span class="file-name" id="fileNameDisplay">Keine Dateien ausgewählt</span>
                     </div>
                 </div>
 
@@ -284,18 +264,18 @@
             </form>
         </div>
 
-        <!-- VIEW 3: ABSCHIED & DANKSAGUNG -->
+        <!-- VIEW 3: ABSCHIED -->
         <div id="view-thanks" class="view">
             <h2>Vielen Dank!</h2>
-            <p>Eure Nachricht, eure Erinnerungen und eure Medien wurden erfolgreich an uns übermittelt.</p>
-            <p>Wir können es kaum erwarten, diese nach der Hochzeit in unserem Magazin-Fotobuch durchzublättern.</p>
+            <p>Eure Nachricht und eure Medien wurden erfolgreich an Savanna & Marcel übermittelt.</p>
+            <p>Wir freuen uns schon riesig darauf, das Magazin zu gestalten!</p>
             <button class="btn" onclick="resetAndReturn()">Zurück zum Start</button>
         </div>
 
-        <!-- VIEW 4: ADMIN / EXPORT ANSICHT -->
+        <!-- VIEW 4: ADMIN / EXPORT -->
         <div id="view-admin" class="view export-container">
             <h2>Gästebuch-Export</h2>
-            <p>Hier seht ihr alle gesammelten Einträge für euer Magazin-Layout.</p>
+            <p>Alle Einträge für euer Magazin-Layout.</p>
             
             <div style="overflow-x: auto;">
                 <table id="exportTable">
@@ -305,12 +285,10 @@
                             <th>Name</th>
                             <th>Nachricht</th>
                             <th>Anekdote</th>
-                            <th>Datei</th>
+                            <th>Medien (bis zu 4)</th>
                         </tr>
                     </thead>
-                    <tbody id="exportTableBody">
-                        <!-- Einträge werden per JS geladen -->
-                    </tbody>
+                    <tbody id="exportTableBody"></tbody>
                 </table>
             </div>
 
@@ -321,85 +299,90 @@
     </div>
 
     <script>
-        // Wechsel zwischen den Ansichten (Tabs)
         function switchView(viewId) {
-            document.querySelectorAll('.view').forEach(view => {
-                view.classList.remove('active');
-            });
+            document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             window.scrollTo(0, 0);
         }
 
-        // Dateinamen im Upload-Feld anzeigen
-        function updateFileName(input) {
+        function updateFileNames(input) {
             const display = document.getElementById('fileNameDisplay');
-            if (input.files && input.files[0]) {
-                display.textContent = input.files[0].name;
+            if (input.files && input.files.length > 0) {
+                if (input.files.length > 4) {
+                    alert('Bitte maximal 4 Dateien auswählen.');
+                    input.value = '';
+                    display.textContent = 'Keine Dateien ausgewählt';
+                    return;
+                }
+                let names = Array.from(input.files).map(f => f.name).join(', ');
+                display.textContent = `${input.files.length} Datei(en) ausgewählt: ${names}`;
             } else {
-                display.textContent = 'Keine Datei ausgewählt';
+                display.textContent = 'Keine Dateien ausgewählt';
             }
         }
 
-        // Formular absenden und Daten im LocalStorage sichern
         function handleFormSubmit(event) {
             event.preventDefault();
 
             const name = document.getElementById('guestName').value;
             const message = document.getElementById('guestMessage').value;
             const memory = document.getElementById('favoriteMemory').value;
-            const fileInput = document.getElementById('guestFile');
-            
-            let fileName = 'Keine Datei';
-            let fileData = null;
+            const fileInput = document.getElementById('guestFiles');
 
-            const saveEntry = (fName, fData) => {
+            const saveEntry = (fileObjects) => {
                 const entry = {
                     date: new Date().toLocaleString('de-DE'),
                     name: name,
                     message: message,
                     memory: memory,
-                    fileName: fName,
-                    fileData: fData
+                    files: fileObjects // Array von bis zu 4 Base64-Dateien
                 };
 
-                // Bestehende Einträge laden oder neuen Array starten
                 let entries = JSON.parse(localStorage.getItem('wedding_guestbook')) || [];
                 entries.push(entry);
                 localStorage.setItem('wedding_guestbook', JSON.stringify(entries));
 
-                // Weiterleitung zur Dankeseite
                 switchView('view-thanks');
             };
 
-            // Falls eine Datei hochgeladen wurde, als Base64 einlesen, damit sie im Speicher bleibt
-            if (fileInput.files && fileInput.files[0]) {
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    saveEntry(file.name, e.target.result);
-                };
-                reader.readAsDataURL(file);
+            if (fileInput.files && fileInput.files.length > 0) {
+                let filesArray = Array.from(fileInput.files);
+                let processedFiles = [];
+                let loadedCount = 0;
+
+                filesArray.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        processedFiles[index] = {
+                            name: file.name,
+                            data: e.target.result
+                        };
+                        loadedCount++;
+                        if (loadedCount === filesArray.length) {
+                            saveEntry(processedFiles);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
             } else {
-                saveEntry(fileName, fileData);
+                saveEntry([]);
             }
         }
 
-        // Admin-Ansicht aufrufen und Tabelle füllen
         function openAdminView() {
             const tbody = document.getElementById('exportTableBody');
             tbody.innerHTML = '';
-
             let entries = JSON.parse(localStorage.getItem('wedding_guestbook')) || [];
 
             if (entries.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Bisher noch keine Einträge vorhanden.</td></tr>';
             } else {
-                entries.forEach(entry => {
+                entries.forEach((entry, idx) => {
                     const tr = document.createElement('tr');
                     
-                    let fileColumn = entry.fileName;
-                    if (entry.fileData) {
-                        fileColumn = `<a href="${entry.fileData}" target="_blank" download="${entry.fileName}">Download (${entry.fileName})</a>`;
+                    let fileLinks = 'Keine Medien';
+                    if (entry.files && entry.files.length > 0) {
+                        fileLinks = entry.files.map((f, i) => `<a href="${f.data}" target="_blank" download="${f.name}">[Bild ${i+1}]</a>`).join(' ');
                     }
 
                     tr.innerHTML = `
@@ -407,16 +390,14 @@
                         <td><b>${escapeHtml(entry.name)}</b></td>
                         <td>${escapeHtml(entry.message)}</td>
                         <td>${escapeHtml(entry.memory)}</td>
-                        <td>${fileColumn}</td>
+                        <td>${fileLinks}</td>
                     `;
                     tbody.appendChild(tr);
                 });
             }
-
             switchView('view-admin');
         }
 
-        // JSON Export für den Weiterverarbeitungsprozess des Magazins
         function exportDataJSON() {
             let entries = localStorage.getItem('wedding_guestbook') || '[]';
             let blob = new Blob([entries], {type: 'application/json'});
@@ -429,11 +410,10 @@
 
         function resetAndReturn() {
             document.getElementById('guestbookForm').reset();
-            document.getElementById('fileNameDisplay').textContent = 'Keine Datei ausgewählt';
+            document.getElementById('fileNameDisplay').textContent = 'Keine Dateien ausgewählt';
             switchView('view-welcome');
         }
 
-        // Hilfsfunktion zur Zeichensicherheit
         function escapeHtml(text) {
             if (!text) return '';
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
